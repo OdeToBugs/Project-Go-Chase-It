@@ -1,1 +1,1 @@
-# Project-Go-Chase-It
+# Project: Go Chase It!
