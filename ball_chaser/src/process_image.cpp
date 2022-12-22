@@ -5,6 +5,9 @@
 // Define a global client that can request services
 ros::ServiceClient client;
 
+// Set a global variable to store whether the robot is in motion
+bool robot_moving = false;
+
 // Map value from one range onto another
 float map_value(float x, float in_min, float in_max, float out_min, float out_max)
 {
@@ -39,7 +42,6 @@ void process_image_callback(const sensor_msgs::Image img)
         max_angular_velocity = 1.0, 
         angle = 0, 
         speed = 0;
-    bool robot_moving = false;
 
     // Loop through all pixels in the image and record their instances and horizontal locations
     for (int i = 0; i < img.height * img.step; i+=3) 
@@ -51,6 +53,7 @@ void process_image_callback(const sensor_msgs::Image img)
         }
     }
 
+    ROS_INFO_STREAM("Count Pixels = " + std::to_string(count_white_pixels) + "    Robot Moving = " + std::to_string(robot_moving));
     // Determine the command to send to the robot via the drive_robot service
     if (count_white_pixels == 0 && robot_moving)
     {
