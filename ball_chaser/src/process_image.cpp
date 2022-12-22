@@ -35,16 +35,16 @@ void process_image_callback(const sensor_msgs::Image img)
         count_white_pixels = 0;
     float average_step = 0, 
         sum_step = 0, 
-        max_linear_velocity = 0.3, 
+        max_linear_velocity = 0.5, 
         max_angular_velocity = 1.0, 
         angle = 0, 
         speed = 0;
     bool robot_moving = false;
 
     // Loop through all pixels in the image and record their instances and horizontal locations
-    for (int i = 0; i < img.height * img.step; i++) 
+    for (int i = 0; i < img.height * img.step; i+=3) 
     {
-        if (img.data[i] == white_pixel) 
+        if (img.data[i] == white_pixel && img.data[i+1] == white_pixel && img.data[i+2] == white_pixel) 
         {
             count_white_pixels += 1;
             sum_step += i % img.step;
@@ -69,7 +69,7 @@ void process_image_callback(const sensor_msgs::Image img)
         ROS_INFO_STREAM("Average Step Calc = " + std::to_string(average_step));
 
         // Calculate percent of max linear velocity based on size of the ball in the image
-        speed = (1.0 - (count_white_pixels*2/(img.height*img.step))) * max_linear_velocity;
+        speed = (1.0 - (count_white_pixels*2/(img.height*img.step/3))) * max_linear_velocity;
         ROS_INFO_STREAM("Angle Calc = " + std::to_string(angle) + "    Speed Calc = " + std::to_string(speed));
 
         // Request a robot move
