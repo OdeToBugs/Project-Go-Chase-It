@@ -27,6 +27,8 @@ bool handle_drive_request(ball_chaser::DriveToTarget::Request& req, ball_chaser:
     res.msg_feedback = "DriveToTargetRequest Received - linear x: " + std::to_string(req.linear_x) + ", angular z: " + std::to_string(req.angular_z);
     ROS_INFO_STREAM(res.msg_feedback);
 
+    return false;
+
 }
 
 
